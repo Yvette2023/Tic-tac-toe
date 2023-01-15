@@ -1,30 +1,70 @@
-grille={
-        'a':[None,None,None],
-        'b':[None,None,None],
-        'c':[None,None,None]
-}
+grille=[["_","_","_"],["_","_","_"],["_","_","_"]]
+
 
 # afficher la grille
-def afficher_grille(grille):  
-    print("{}|{}|{}".format(grille['a'][0],grille['a'][1],grille['a'][2]))
-    print("{}|{}|{}".format(grille['b'][0],grille['b'][1],grille['b'][2]))
-    print("{}|{}|{}".format(grille['c'][0],grille['c'][1],grille['c'][2]))
+def afficher_grille(grille): 
+    separateur="|" 
+    for ligne in grille:
+        print("|", end="")
+        print("|".join(ligne), end="")
+        print("|")
 
-afficher_grille(grille)
-
-# voir si c'est possible de jouer
-def jeu_terminer(grille):
-    for values in grille.items():
-        if values == None:
-            return ("au joueur suivant")
+# jouer un coup puis mettre à jour la grille
+def jouer(grille):
+    joueur_1 = "x"
+    joueur_2 = "o"
+    joueur_en_cours = joueur_1
+    nombre_cases_vides = 9
+    
+    print("c'est au tour du joueur suivant")
+    afficher_grille(grille)
+    
+    while nombre_cases_vides > 0:
+   
+        ligne = int(input("Entrez le numéro de ligne (1, 2, ou 3) : "))
+        colonne = int(input("Entrez le numéro de colonne (1, 2, ou 3) : "))
+        if ligne < 1 or ligne > 3 or colonne < 1 or colonne > 3:
+            print("case inexistante, veuillez réessayer.")
+            continue
+        if grille[ligne-1][colonne-1] != "_":
+            print("Case déjà jouée, veuillez en choisir une autre." + grille[ligne-1][colonne-1])
+            continue
+        grille[ligne-1][colonne-1] = joueur_en_cours
+        if joueur_en_cours == joueur_1:
+            joueur_en_cours = joueur_2
+            print("c'est au tour du joueur suivant:"+joueur_en_cours)
         else:
-            return("le jeu est terminé")
-print(jeu_terminer(grille))
+            joueur_en_cours = joueur_1
+            print("c'est au tour du joueur suivant:"+joueur_en_cours)
+        afficher_grille(grille)
+        if grille_gagnante(grille):
+            break
+        nombre_cases_vides -= 1
+    print("La partie est terminée.")
 
 # vérifier si la grille est gagnante
-def grille_gagnate(grille,joueur):
-    if (grille['a'][0]) == joueur and grille['a'][1]==joueur and grille['a'][2]== joueur or (grille['b'][0]) == joueur and grille['b'][1]==joueur and grille['b'][2]== joueur or (grille['c'][0]) == joueur and grille['c'][1]==joueur and grille['c'][2]== joueur :
+def grille_gagnante(grille):
+
+    # Vérifie les lignes
+    for i in range(3):
+        if grille[i][0] == grille[i][1] == grille[i][2] and grille[i][0] != "_":
+            return True
+
+    # Vérifie les colonnes
+    for i in range(3):
+        if grille[0][i] == grille[1][i] == grille[2][i] and grille[0][i] != "_":
+            return True
+
+    # Vérifie les diagonales
+    if grille[0][0] == grille[1][1] == grille[2][2] and grille[0][0] != "_":
         return True
-    else:
-        return False
-print(grille_gagnate(grille))
+    if grille[0][2] == grille[1][1] == grille[2][0] and grille[0][2]!= "_":
+        return True
+    return False
+
+# # Exemple d'utilisation
+jouer(grille)
+if grille_gagnante(grille):
+    print("Grille gagnante!")
+else:
+    print("Aucun gagnant.")
