@@ -62,9 +62,18 @@ def grille_gagnante(grille):
         return True
     return False
 
-# # Exemple d'utilisation
+# Exemple d'utilisation
 jouer(grille)
 if grille_gagnante(grille):
     print("Grille gagnante!")
 else:
     print("Aucun gagnant.")
+
+
+# Vérifier si la grille est pleine
+def est_pleine(grille):
+    for elt in grille:
+        for case in grille[elt]:
+            if case == "_":
+                return False
+    return True
